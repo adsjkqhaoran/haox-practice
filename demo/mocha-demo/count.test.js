@@ -1,6 +1,6 @@
 var count = require('./count.js');
-var expect = require('chai').expect;
-var request = require('superagent');
+var expect = require('chai').expect;//断言库
+var request = require('superagent');//用于抓取网页
 describe("加法测试套件",function(){
 	it("1 + 2 = 3",function(){
 		expect(count.add(1,2)).to.be.equal(3);
