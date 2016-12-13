@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>状态模式</title>
+</head>
+<body>
+	
+</body>
+<script>
+	//思路 
+	//1.每个状态,对应一系列相应的行为,并决定着下一个状态,从而排除过多的if判断
+	//2.需要约定每个状态必需实现的行为,类似于抽象类,但是JavaScript没有抽象类,故可以在父类,抛出异常从而达到重构函数的提醒！
+
+	//练习 
+	//上传
+	//1.上传有两个按钮 一个状态按钮 一个删除按钮
+	//2.     状态            按钮1            按钮2
+		// --未上传       开始扫描    请先上传
+		// --扫描           停止扫描    扫描未完成
+		// --中断扫描   重新扫描    扫描未完成
+		// --扫描完成   开始上传    未上传完成
+		// --上传中      暂停上传    未上传完成
+		// --中断上传   继续上传    未上传完成
+		// --失败         重新上传    未上传完成
+		// --成功           重新上传    可删除
+	//如果使用传统的状态判断 会使程序变得难以维护 及臃肿
+    
+
+
+    //上传主类
+    //构造函数
+	var UploadObj = function(){
+		this.button1 = '';
+		this.button2 = '';
+		this.dom = '';
+		this.currentSate = "startState";
+		this.startState = new StartState(this);
+		this.scanState = new ScanState(this);
+		this.stopScanState = new StopScanState(this);
+	}
+	UploadObj.prototype.init = function(){
+		this.dom = document.createElement('div');
+		this.dom.id = "upload";
+		this.dom.innerHTML = '<span>上传控件</span><button id="button1">开始上传</button><button id="button2">删除</button>';
+		document.body.appendChild(this.dom);
+		this.button1 = document.getElementById('button1');
+		this.button2 = document.getElementById('button2');
+		this.bindEvent();
+	}
+	UploadObj.prototype.bindEvent = function(){
+		var self = this;
+		this.button1.onclick = function(){
+			self.currentState.clickHandle1();
+		}
+		this.button2.onclick = function(){
+			self.currentState.clickHandle2();
+		}
+	}
+	
+	//状态类父类 构造函数
+	var uploadStateFactory = (function(){
+		var pState = function(){
+			
+		}
+		//构建父类
+		pState.prototype.clickHandle1 = function(){
+			throw new Error('请重写该方法！clickHandle1');
+		}
+		pState.prototype.clickHandle2 = function(){
+			throw new Error('请重写该方法！clickHandle2');
+		}
+		return function(){
+			var F = function(uploadObj){
+				this.upload = uploadObj;
+			}
+			F.prototype = new pState();
+			for(var i in arguments){
+				F.prototype[i] = arguments[i];
+			}
+			return  F;
+		}
+	})()
+	//
+	var StartState = uploadStateFactory(function(){
+		console.log('开始扫描!');
+		this.upload.currentSate = "scanState";
+	},function(){
+		console.log('未进行上传！');
+	})
+	//
+	var ScanState = uploadStateFactory(function(){
+		console.log('开始扫描!');
+		this.upload.currentSate = "stopScanState";
+	},function(){
+		console.log('未进行上传！');
+	})
+	//
+	var StopScanState = uploadStateFactory(function(){
+		console.log('停止扫描!');
+		this.upload.currentSate = "";
+	},function(){
+		console.log('未扫描完成 ！');
+	})
+	var uploadObj = new UploadObj();
+	uploadObj.init();
+	window.external.upload = function(state){
+
+	}
+</script>
+</html>
