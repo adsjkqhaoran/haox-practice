@@ -34,10 +34,21 @@
 		this.button1 = '';
 		this.button2 = '';
 		this.dom = '';
-		this.currentSate = "startState";
+		
 		this.startState = new StartState(this);
+		
 		this.scanState = new ScanState(this);
 		this.stopScanState = new StopScanState(this);
+		this.resuceScanState = new ResuceScanState(this);
+		this.successScanState = new SuccessScanState(this);
+
+
+		this.uploadingState = new UploadingState(this);
+		this.stopState = new StopState(this);
+		this.resuceState = new ResuceState(this);
+		this.successState = new SuccessState(this);
+		
+		this.currentState = '';
 	}
 	UploadObj.prototype.init = function(){
 		this.dom = document.createElement('div');
@@ -58,6 +69,38 @@
 		}
 	}
 	
+	UploadObj.prototype.start = function(){
+		this.currentState = this.startState;
+	}
+	
+	
+	UploadObj.prototype.scan = function(){		
+		this.currentState = this.scanState;
+	}
+	UploadObj.prototype.stopScan = function(){
+		this.currentState = this.stopScanState;
+	}
+	UploadObj.prototype.resuceScan = function(){
+		this.currentState = this.resuceScanState;
+	}
+	UploadObj.prototype.successScan = function(){
+		this.currentState = this.successScanState;
+	}
+	
+	
+	UploadObj.prototype.uploading = function(){	
+		this.currentState = this.uploadingState;
+	}
+	UploadObj.prototype.resuce = function(){	
+		this.currentState = this.resuceState;
+	}
+	UploadObj.prototype.stop = function(){	
+		this.currentState = this.stopState;
+	}
+	UploadObj.prototype.success = function(){
+		this.currentState = this.successState;
+	}
+	
 	//状态类父类 构造函数
 	var uploadStateFactory = (function(){
 		var pState = function(){
@@ -70,42 +113,126 @@
 		pState.prototype.clickHandle2 = function(){
 			throw new Error('请重写该方法！clickHandle2');
 		}
-		return function(){
+		return function(params){
 			var F = function(uploadObj){
 				this.upload = uploadObj;
 			}
 			F.prototype = new pState();
-			for(var i in arguments){
-				F.prototype[i] = arguments[i];
+
+			for(var i in params){
+				
+				F.prototype[i] = params[i];
 			}
 			return  F;
 		}
 	})()
 	//
-	var StartState = uploadStateFactory(function(){
-		console.log('开始扫描!');
-		this.upload.currentSate = "scanState";
-	},function(){
-		console.log('未进行上传！');
+	var StartState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log('开始!');
+			this.upload.scan();
+		},
+		"clickHandle2":function(){
+			console.log('未进行上传！');
+		}
 	})
 	//
-	var ScanState = uploadStateFactory(function(){
-		console.log('开始扫描!');
-		this.upload.currentSate = "stopScanState";
-	},function(){
-		console.log('未进行上传！');
+	var ScanState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log('扫描中!');
+			this.upload.stopScan();
+		},
+		"clickHandle2":function(){
+			console.log('未扫描完成！');
+		}
 	})
 	//
-	var StopScanState = uploadStateFactory(function(){
-		console.log('停止扫描!');
-		this.upload.currentSate = "";
-	},function(){
-		console.log('未扫描完成 ！');
+	var StopScanState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log('停止扫描!');
+			this.upload.resuceScan();
+		},
+		"clickHandle2":function(){
+			console.log('未扫描完成！');
+		}
 	})
+	//
+	var ResuceScanState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log("继续扫描！");
+			this.upload.scan();
+		},
+		"clickHandle2":function(){
+			console.log("未扫描完成！");
+		}
+	})
+	//
+	var SuccessScanState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log("扫描完成！");
+			this.upload.uploading();
+		},
+		"clickHandle2":function(){
+			console.log("未扫描完成！");
+		}
+	})
+	
+	
+	
+	//
+	var UploadingState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log("上传中！");
+			this.upload.stop();
+		},
+		"clickHandle2":function(){
+			console.log("未扫描完成！");
+		}
+	})
+	//
+	var ResuceState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log("继续上传！");
+			this.upload.uploading();
+		},
+		"clickHandle2":function(){
+			console.log("未扫描完成！");
+		}
+	})
+	//
+	var StopState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log('停止上传!');
+			this.upload.resuce();
+		},
+		"clickHandle2":function(){
+			console.log('未上传完成！');
+		}
+	})
+	//
+	var SuccessState = uploadStateFactory({
+		"clickHandle1":function(){
+			console.log("完成上传！");
+		},
+		"clickHandle2":function(){
+			console.log("删除成功！");
+		}
+	})
+	
+	
 	var uploadObj = new UploadObj();
 	uploadObj.init();
 	window.external.upload = function(state){
-
+		uploadObj[state]();
 	}
+	setTimeout(function(){
+		window.external.upload('start');
+	},1000)
+	setTimeout(function(){
+		window.external.upload('uploading');
+	},5000)
+	setTimeout(function(){
+		window.external.upload('success');
+	},10000)
 </script>
 </html>
