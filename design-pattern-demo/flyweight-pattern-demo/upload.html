@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>flyweight-pattern-demo</title>
+</head>
+<body>
+<script>
+    //思路:许多对象都是由有限数量的内部元素 + 各种变化的外部元素组合而成的 = 新对象
+    //     故我们可以尝试不new那么多对象 而是通过new有限的内部元素 + 各种辩护的外部元素  = 组装成你所需要的对象
+
+
+    //练习：模拟上传类的编写
+    //     假设每个上传对象的属性有   上传类型[内部元素] 文件大小[外部元素] 文件名称[外部元素]
+    //     不使用享元模式之前 有多少个文件则得new多少个上传对象 如今只需new有限内部元素个数即可
+    var Upload = function(type){
+        this.uploadType = type;
+    }
+    Upload.prototype.delFile = function(){
+
+    }
+    //工厂模式 防止重复对象的产生
+    var UploadFlyWeightFactory = function(){
+        var uploadFlyWeightObj = {};
+        return function(type){
+            if(!uploadFlyWeightObj[type]){
+                uploadFlyWeightObj[type] =  new Upload(type);
+            }
+            return uploadFlyWeightObj[type];
+        }
+    }
+    //外部数据,及组装方法
+    var UploadManage = (function(){
+        var uploadObj ={};
+        return {
+            add:function(key,type,fileName,fileSize){
+                var UploadFlyWeight = UploadFlyWeightFactory(type);
+                var dom = document.createElement('div');
+                dom.id = key;
+                dom.innerHTML ="文件:"+fileName+"<button class='del'>删除</button>";
+                document.body.appendChild(dom);
+                var self = this;
+                dom.getElementsByClassName('del').onclick = function(){
+
+                }
+                uploadObj[key] = {
+                    fileName:fileName,
+                    fileSize:fileSize,
+                    dom:dom
+                }
+
+            },
+            setCombine:function(){
+
+            }
+        }
+    })()
+</script>
+</body>
+</html>
