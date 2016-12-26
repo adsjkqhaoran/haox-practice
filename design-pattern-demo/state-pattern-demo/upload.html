@@ -117,10 +117,11 @@
 			var F = function(uploadObj){
 				this.upload = uploadObj;
 			}
+			//通过原型链实现继承
 			F.prototype = new pState();
 
 			for(var i in params){
-				
+
 				F.prototype[i] = params[i];
 			}
 			return  F;
