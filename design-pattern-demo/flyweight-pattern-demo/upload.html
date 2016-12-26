@@ -16,11 +16,12 @@
     var Upload = function(type){
         this.uploadType = type;
     }
-    Upload.prototype.delFile = function(){
-
+    Upload.prototype.getType = function(key){
+        UploadManage.setCombine(this,key);
+        console.log(this.uploadType+"文件名:"+this.fileName);
     }
     //工厂模式 防止重复对象的产生
-    var UploadFlyWeightFactory = function(){
+    var UploadFlyWeightFactory = (function(){
         var uploadFlyWeightObj = {};
         return function(type){
             if(!uploadFlyWeightObj[type]){
@@ -28,33 +29,57 @@
             }
             return uploadFlyWeightObj[type];
         }
-    }
+    })()
     //外部数据,及组装方法
     var UploadManage = (function(){
         var uploadObj ={};
+        var key = 0;
         return {
-            add:function(key,type,fileName,fileSize){
+            add:function(type,fileName,fileSize){
                 var UploadFlyWeight = UploadFlyWeightFactory(type);
                 var dom = document.createElement('div');
+                key = key + 1;
                 dom.id = key;
                 dom.innerHTML ="文件:"+fileName+"<button class='del'>删除</button>";
                 document.body.appendChild(dom);
-                var self = this;
-                dom.getElementsByClassName('del').onclick = function(){
 
+                dom.querySelector('.del').onclick = function(){
+                    UploadManage.delFile(dom.id);
                 }
                 uploadObj[key] = {
                     fileName:fileName,
                     fileSize:fileSize,
-                    dom:dom
+                    dom:dom,
+                    inner:UploadFlyWeight
                 }
-
+                return key;
             },
-            setCombine:function(){
-
+            getSize:function(key){
+                console.log(uploadObj[key].fileSize);
+            },
+            getType:function(key){
+                console.log(uploadObj[key].inner.getType(key));
+            },
+            delFile:function(key){
+                uploadObj[key].dom.remove();
+            },
+            //重要方法组合对象
+            setCombine:function(innerObj,key){
+                for(var i in uploadObj[key]){
+                    innerObj[i] = uploadObj[key][i];
+                }
             }
         }
     })()
+    //添加上传
+    var key1 = UploadManage.add('flash','f-1.jpg','100');
+    UploadManage.getSize(key1);
+    UploadManage.getType(key1);
+    UploadManage.add('html5','h-1.jpg','100');
+    UploadManage.add('html5','h-2.jpg','200');
+
+    //改进在外部对象属性中 保存内部属性的引用将会大大提高效率
+
 </script>
 </body>
 </html>
