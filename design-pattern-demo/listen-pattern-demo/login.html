@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>listen-pattern-demo</title>
+</head>
+<body>
+<script>
+    //思路:需要一个全局对象 管理各种订阅回调 当对应的事件触发后 再去执行保存起来的回调
+
+    //练习：已网站登录为例子
+//         1.登录前头部显示登录提示,登录后显示已登录
+//         2.购物车在登录后显示刷新个人信息
+//         3.登录后去除广告
+//         4.当登录后触发相应的订阅器
+
+    var Event = (function(){
+        var EventLoop = {};
+
+        return {
+            listen:function(key,fn){
+                if(!EventLoop[key]){
+                    EventLoop[key] = [];
+                }
+                if(!fn){
+                    EventLoop[key].push(fn);
+                }
+            },
+            trigger:function(){
+                
+            },
+            remove:function(){}
+        }
+    })()
+</script>
+</body>
+</html>
