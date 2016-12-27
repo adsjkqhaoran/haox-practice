@@ -16,22 +16,49 @@
 
     var Event = (function(){
         var EventLoop = {};
-
         return {
             listen:function(key,fn){
                 if(!EventLoop[key]){
                     EventLoop[key] = [];
                 }
-                if(!fn){
+                if(fn){
                     EventLoop[key].push(fn);
                 }
             },
             trigger:function(){
-                
+                //这里的arguments 是类数组[可以理解为自己组装的添加了数组属性的对象,而并不是真正重数组那继承过来的]
+                var key = Array.prototype.shift.apply(arguments);
+                if(EventLoop[key]&&EventLoop[key].length){
+                    for(var i in EventLoop[key]){
+                        EventLoop[key][i].apply(this,arguments);
+                    }
+                }
             },
-            remove:function(){}
+            remove:function(key){
+                delete EventLoop[key];
+            }
         }
     })()
+    Event.listen("loading",function(info){
+        console.log(info);
+        console.log("now is loading!");
+    })
+    Event.listen("loading",function(info){
+        console.log(info);
+        console.log("now is loading2!");
+    })
+    Event.listen("starting",function(info){
+        console.log(info);
+        console.log("now is starting!");
+    })
+//    Event.remove("loading");
+    setTimeout(function(){
+        Event.trigger("loading","load info");
+    },3000)
+    setTimeout(function(){
+        Event.trigger("starting","start info");
+    },5000)
+
 </script>
 </body>
 </html>
