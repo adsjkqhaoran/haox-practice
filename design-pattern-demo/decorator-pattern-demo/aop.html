@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aop decorator-pattern-demo</title>
+</head>
+<body>
+<script>
+    //思路: Function.prototype.before 之所以实现这个功能 因为1.Function是所有函数的父类它的所有方法都是子类都有 2.但是Function的继承方式应该为copy继承
+
+    //练习: 1.为按钮点击后,添加统计功能,而不影响原代码点击处理
+    Function.prototype.after = function(fn){
+        var _self = this;
+        return function(){
+            var _self.apply(this,arguments);
+            fn.apply(this,arguments);
+        }
+    }
+</script>
+</body>
+</html>
