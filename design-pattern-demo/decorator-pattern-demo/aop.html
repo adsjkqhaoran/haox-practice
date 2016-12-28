@@ -5,17 +5,39 @@
     <title>aop decorator-pattern-demo</title>
 </head>
 <body>
+<buttion id="btn">1</buttion>
 <script>
     //思路: Function.prototype.before 之所以实现这个功能 因为1.Function是所有函数的父类它的所有方法都是子类都有 2.但是Function的继承方式应该为copy继承
+//    3.另外之所以可以实现链式调用是因为每次运行之时,返回的都是一个组装过后的新函数
 
     //练习: 1.为按钮点击后,添加统计功能,而不影响原代码点击处理
+//          2.在点击前对登录状态进行判断
     Function.prototype.after = function(fn){
         var _self = this;
         return function(){
-            var _self.apply(this,arguments);
+             _self.apply(this,arguments);
             fn.apply(this,arguments);
         }
     }
+    Function.prototype.before =  function(fn){
+        var _self = this;
+        return function(){
+            fn.apply(this,arguments);
+            _self.apply(this,arguments);
+        }
+    }
+    document.getElementById('btn').onclick = function(){
+        console.log('click it'+'id is '+this.id);
+    }
+    //链式
+    document.getElementById('btn').onclick = document.getElementById('btn').onclick.after(function(){
+        console.log('count it');
+    }).after(function(){
+        console.log('count it 2');
+    }).before(function(){
+        console.log('before all');
+    })
+    document.getElementById('btn').onclick();
 </script>
 </body>
 </html>
