@@ -52,14 +52,14 @@
     var MoveCommand = function(receive,state){
         return {
             execute:function(x){
-                CommandLoop['old'].push(arguments);
+                CommandLoop['old'].push(receive.x);
                 receive[state].call(receive,x);
                 CommandLoop['commond'].push(receive[state]);
                 console.log(CommandLoop);
             },
             undo:function(){
-               var old = CommandLoop['old'].pop();
-                CommandLoop['commond'].pop().apply(receive,old);
+               var oldX = CommandLoop['old'].pop();
+                CommandLoop['commond'].pop().call(receive,oldX);
             },
             redo:function(){
 
