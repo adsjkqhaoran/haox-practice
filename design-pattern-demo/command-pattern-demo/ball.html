@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>command-pattern-demo</title>
+    <style>
+        #ball{
+           border-radius:50%;
+           width:100px;
+           height:100px;
+           background:#999;
+           position: relative;
+           left:0px;
+           top:0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ball">
+
+    </div>
+    <br/>
+    X: <input type="text" id="x" value="0"/>
+    <br/>
+    <button id="reset">reset</button>
+    <button id="move">move</button>
+<script>
+    //思路：1.命令模式其实和策略模式 十分相仿 通过传入一个策略对象和状态从而决定使用哪个方法
+//    2.但是组合后的方法将会被压入堆栈或缓存列表可以实现回退和撤销
+//    3.命令模式还有个作用就是把执行对象和策略分离，通过把策略统一封装成命令供对象使用
+
+//    练习:1.实现一个小球的运动并可以回退到上一次的位置
+    var ball = document.getElementById('ball');
+    var resetBtn = document.getElementById('reset');
+    var moveBtn =  document.getElementById('move');
+    var inpt = document.getElementById("x");
+    var Ball = function(dom){
+        this.x = 0;
+        this.dom = dom;
+
+    }
+    Ball.prototype = {
+        "move":function(x){
+            this.x = x;
+            this.dom.style.left = x + "px";
+        }
+    }
+    var CommandLoop = {
+        "old":[],
+        "commond":[]
+    };
+    var MoveCommand = function(receive,state){
+        return {
+            execute:function(x){
+                CommandLoop['old'].push(arguments);
+                receive[state].call(receive,x);
+                CommandLoop['commond'].push(receive[state]);
+                console.log(CommandLoop);
+            },
+            undo:function(){
+               var old = CommandLoop['old'].pop();
+                CommandLoop['commond'].pop().apply(receive,old);
+            },
+            redo:function(){
+
+            }
+        }
+    }
+    var Ball = new Ball(ball);
+    var BallMove = MoveCommand(Ball,"move");
+
+    move.onclick = function(){
+        BallMove.execute(inpt.value);
+    }
+    reset.onclick = function(){
+        BallMove.undo();
+    }
+
+</script>
+</body>
+</html>
