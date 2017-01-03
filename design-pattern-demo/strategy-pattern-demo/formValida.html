@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>strategy-pattern-demo</title>
+</head>
+<body>
+<form action="" id="myForm" onsubmit="return false;">
+    <input type="text" id="name">
+    <input type="text" id="tel">
+    <input type="submit" id="sub">
+</form>
+    <script>
+    //思路:通过传参组合方法的方法,替代if的判断模式
+    //练习:编写表单验证
+        var Validator = function(){
+            this.loop = [];
+            this.strategy = {
+                "noEmpty":function(value,errorMsg){
+                    if(!value){
+                        return errorMsg;
+                    }
+                },
+                "minLength":function(value,minLength,errorMsg){
+                    if(value.length<minLength){
+                        return errorMsg;
+                    }
+                }
+            }
+        };
+        Validator.prototype.add = function(dom,rule,errorMsg){
+            this.loop.push(function(){
+                var ary = rule.split(":");
+                var key = ary.shift();
+                ary.unshift(dom.value);
+                ary.push(errorMsg);
+                return   this.strategy[key].apply(this,ary);
+            });
+        }
+        Validator.prototype.start = function(){
+            for(var i in this.loop){
+                var error = this.loop[i].apply(this);
+                if(error){
+                    alert(error);
+                    return false;
+                }
+            }
+        }
+
+        document.getElementById('sub').onclick = function(){
+            var validator = new Validator();
+            validator.add(document.getElementById('name'),'noEmpty','不能为空！');
+            validator.add(document.getElementById('tel'),'minLength:3','不能少于3位数！');
+            validator.start();
+        }
+
+    </script>
+</body>
+</html>

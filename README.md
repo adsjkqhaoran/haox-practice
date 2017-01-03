@@ -7,3 +7,4 @@
  - listen pattern demo 订阅器模式
  - decorator pattern demo 装饰着模式
  - closure pattern demo 单列模式
+ - strategy pattern demo 策略模式
