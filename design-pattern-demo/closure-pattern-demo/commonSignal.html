@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>commonSignal</title>
+</head>
+<body>
+ <script>
+    //思路：通过一个可访问的标志位 来判断之后是否运行
+    //练习:防止dom重复创建
+    var getSignal = function(fn){
+        var _signal = null;
+        return function(){
+               return _signal || (_signal = fn.apply(this,arguments));
+        }
+    }
+    var createDom = function(value){
+        var dom = document.createElement('div');
+        dom.innerHTML = value;
+        document.body.appendChild(dom);
+        return dom;
+    }
+    var createDomSignal =  getSignal(createDom);
+    createDomSignal('1');
+    createDomSignal('2');
+ </script>
+</body>
+</html>

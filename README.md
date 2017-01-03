@@ -6,3 +6,4 @@
  - flyweight pattern demo 享元模式
  - listen pattern demo 订阅器模式
  - decorator pattern demo 装饰着模式
+ - closure pattern demo 单列模式
