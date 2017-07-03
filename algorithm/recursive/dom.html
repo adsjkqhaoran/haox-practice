@@ -1,0 +1,148 @@
+<html>
+
+<body>
+    <header id="header">
+        <ul id="menu">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </header>
+
+    <div id="main" class="main">
+        <div id="warp" class="warp">
+            <div id="left" class="left">
+                <div class="tit"></div>
+            </div>
+            <div id="right" class="right">
+                <div class="tit"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function getByElementId(node, id) {
+        //遍历所有的node
+        while (node) {
+            if (node.id === id) return node;
+            node = nextElement(node);
+        }
+        return null;
+    }
+
+    function nextElement(node) {
+        //子元素
+        if (node.children.length) {
+            return node.children[0];
+        }
+        //如果没有下级元素 则同级元素
+        if (node.nextElementSibling) {
+            return node.nextElementSibling;
+        }
+        //如果都没有则获取父节点的同级节点
+        while (node.parentNode) {
+            if (node.parentNode.nextElementSibling) {
+                return node.parentNode.nextElementSibling;
+            }
+            //返回该父节点
+            node = node.parentNode;
+        }
+        return null;
+    }
+    // console.log()
+    //eg ('.main > div .tit')
+    var selectors = [{
+        relation: 'descendant',
+        matchType: 'class',
+        value: 'tit'
+    }, {
+        relation: 'child',
+        matchType: 'tag',
+        value: 'div'
+    }, {
+        relation: 'subSelector',
+        matchType: 'class',
+        value: 'warp'
+    }];
+    //匹配结果
+    function match(node, selector) {
+        if (node === document) return false;
+        switch (selector.matchType) {
+            case "class":
+                return node.className.trim().indexOf(selector.value) >= 0;
+            case "tag":
+                return node.tagName.toLowerCase() === selector.value.toLowerCase();
+            case "id":
+                return node.id === selector.value;
+            default:
+                throw "unkonow selector match type";;
+        }
+    }
+    //向dom树链往上爬
+    function nextTarget(node, selector) {
+        if (!node || node === document) return null;
+        switch (selector.relation) {
+            //为某元素的子孙元素
+            case "descendant":
+                return {
+                    node: node.parentNode,
+                    hasNext: true
+                };
+            //为某元素的子元素    
+            case "child":
+                return {
+                    node: node.parentNode,
+                    hasNext: false
+                };
+             //为某元素的同级元素   
+            case "sibling":
+                return {
+                    node: node.previousSibling,
+                    hasNext: true
+                };
+            default:
+                throw "unknown selector relation type";
+                //hasNext表示当前选择器relation是否允许继续找下一个节点
+        }
+    }
+    function querySelector(node,selectors){
+        while(node){
+            var currentNode = node;
+            if(!match(node,selectors[0])){
+                node = nextElement(currentNode);
+                continue;
+            }
+            //找到匹配节点后 ，继续匹配剩余选择器
+            var next = null;
+            for(var i = 0; i < selectors.length -1 ;i++){
+                var matchIt = false;
+                do{
+                    //反向 向上遍历dom树 匹配选择器
+                    next = nextTarget(node,selectors[i]);
+                    node = next.node;
+                    //没有相关节点 当前node匹配失败
+                    if(!node) break;
+                    if(match(node,selectors[i + 1])){
+                        //匹配到后跳出 继续匹配剩余选择器
+                        matchIt = true;
+                        break;
+                    }
+                }while(next.hasNext);
+                //什么都没匹配到跳出
+                if(!matchIt) break;
+            }
+            
+            if(matchIt && i === selectors.length - 1){
+                console.log(currentNode);
+                return currentNode;
+            }
+            //继续遍历完所有dom
+            node = nextElement(currentNode);
+        }
+        return null;
+    }
+    console.log(querySelector(document,selectors));
+</script>
+
+</html>
