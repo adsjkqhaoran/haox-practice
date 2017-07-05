@@ -1,4 +1,4 @@
-// 树结构遍历 树结构遵循 左边的子节点<本节点<右边的子节点
+// 树结构遍历 树结构遵循 左边的子节点<本节点<右边的子节点 最小值肯定位于左下角 最大值肯定位于右下角
 function BinarySearchTree(){
     var Node = function(key){
         this.key = key ;
