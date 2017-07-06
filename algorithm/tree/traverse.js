@@ -55,6 +55,7 @@ tree.insert(20);
 tree.insert(18);
 tree.insert(25);
 tree.insert(6);
+tree.insert(1);
 tree.inOrderTraverse(function(value){
     console.log(value);
 })
