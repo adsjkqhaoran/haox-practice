@@ -18,5 +18,5 @@
  - tree          二叉树遍历
  - sort          排序算法
     > popsort   冒泡排序   
-    > mergesort 归并排序 
+    > mergesort 归并排序
     > quicksort 快速排序
