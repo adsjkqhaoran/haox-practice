@@ -68,7 +68,7 @@ https://juejin.im/post/5958bac35188250d892f5c91?utm_source=gold_browser_extensio
     }];
     //匹配结果
     function match(node, selector) {
-        if (node === document) return false;
+        if (node === document) return false;//需要注意的是document没有class ,tag ,id等属性
         switch (selector.matchType) {
             case "class":
                 return node.className.trim().indexOf(selector.value) >= 0;
@@ -138,7 +138,7 @@ https://juejin.im/post/5958bac35188250d892f5c91?utm_source=gold_browser_extensio
                 console.log(currentNode);
                 return currentNode;
             }
-            //继续遍历完所有dom
+            //继续遍历完所有dom 找到下一个匹配第一个selectors的doms
             node = nextElement(currentNode);
         }
         return null;
