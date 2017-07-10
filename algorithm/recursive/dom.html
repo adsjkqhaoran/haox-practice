@@ -46,7 +46,7 @@ https://juejin.im/post/5958bac35188250d892f5c91?utm_source=gold_browser_extensio
             if (node.parentNode.nextElementSibling) {
                 return node.parentNode.nextElementSibling;
             }
-            //返回该父节点
+            //没有找到的话 以该父节点继续寻找下一个父节点的同级元素
             node = node.parentNode;
         }
         return null;
