@@ -1,5 +1,5 @@
 var quickSort = function(arr){
-    if (arr.length <= 1) { 
+    if (arr.length <= 1) { //这里其实是可能传入[]空数组的 因为有可能一边一个数据都没有被分到
         return arr;
      }
     var middle = Math.floor((arr.length)/2);
