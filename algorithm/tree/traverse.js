@@ -23,6 +23,18 @@ function BinarySearchTree(){
     this.min = function(){
         return  minNode(root);   
     }
+    this.scane = function(){
+        scaneTree(root);
+    }
+    var scaneTree = function(node){
+        if(node.left!=null){
+            scaneTree(node.left);
+        }
+        console.log(node.key);
+        if(node.right!=null){
+            scaneTree(node.right);
+        }
+    }
     var minNode = function(node){
         if(node.left!==null){
          return   minNode(node.left);
@@ -31,6 +43,52 @@ function BinarySearchTree(){
     }
     this.max = function(){
         return maxNode(root);
+    }
+    this.delete = function(key){
+       root  = deleteNode(root,key);
+       return root;
+    }
+    var deleteNode = function(node,key){
+        if(node == null){
+            return false;
+        }
+        if(key < node.key){
+           node.left = deleteNode(node.left,key);//去掉父节点的引用
+           return node;
+        }else if(key > node.key){
+           node.right = deleteNode(node.right,key);
+           return node;
+        }else{
+            //找到了要删除的节点
+
+            //该节点下再无值
+            if(node.left == null && node.right == null){
+                node = null;
+                return node;//这里需要注意的是需要把值返回给父节点,这样才能去除引用从而去掉值 不然因为父节点引用了 该对象是不会消亡的
+            }
+
+            //该节点下有一边又值
+            if(node.left == null){
+                node = node.right;
+                return node;
+            }
+            if(node.right == null){
+                node = node.left;
+                return node;
+            }
+            //该节点下 左右皆有值 取右边最小值顶替该节点
+            var minNode = minNodeObj(node.right);
+            node.key = minNode.key;
+            minNode = null;
+            return node;
+        }
+
+    }
+    var minNodeObj = function(node){
+        if(node.left!==null){
+            return minNodeObj(node.left);
+        }
+        return node;
     }
     var maxNode = function(node){
         if(node.right !== null){
@@ -98,3 +156,7 @@ tree.inOrderTraverse(function(value){
 console.log(tree.search(2));
 console.log(tree.min());
 console.log(tree.max());
+console.log("********");
+
+tree.delete(25);
+tree.scane();
