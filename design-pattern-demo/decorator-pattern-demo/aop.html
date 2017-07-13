@@ -11,7 +11,8 @@
 //    3.另外之所以可以实现链式调用是因为每次运行之时,返回的都是一个组装过后的新函数
 
     //练习: 1.为按钮点击后,添加统计功能,而不影响原代码点击处理
-//          2.在点击前对登录状态进行判断
+//         2.在点击前对登录状态进行判断
+//         其实就是通过befor after把所有函数 一一履直 
     Function.prototype.after = function(fn){
         var _self = this;
         return function(){
@@ -31,11 +32,11 @@
     }
     //链式
     document.getElementById('btn').onclick = document.getElementById('btn').onclick.after(function(){
-        console.log('count it');
+        console.log(this,'count it');
     }).after(function(){
         console.log('count it 2');
     }).before(function(){
-        console.log('before all');
+        console.log(this,'before all');
     })
     document.getElementById('btn').onclick();
 </script>
