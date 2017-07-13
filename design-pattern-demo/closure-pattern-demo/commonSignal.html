@@ -11,7 +11,7 @@
     var getSignal = function(fn){
         var _signal = null;
         return function(){
-               return _signal || (_signal = fn.apply(this,arguments));
+               return _signal || (_signal = fn.apply(this,arguments));//其实就是保存第一次的运行结果的值从而实现功能
         }
     }
     var createDom = function(value){
