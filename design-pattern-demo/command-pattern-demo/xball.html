@@ -1,0 +1,68 @@
+<html>
+    <style>
+        .ball{
+            width: 100px;
+            height: 100px;
+            background: black;
+            border-radius: 100%;
+            position: relative;
+            left: 0px;
+        }
+        
+    </style>
+    <body>
+        <div id="ball" class="ball">
+
+        </div>
+        <input type="text" id="bar">
+        <input type="button" value="reset" id="reset"/>
+        <input type="button" value="submit" id="submit"/>
+        <script>
+            // 强化版通过 每次运动都会传入from,to两个属性 ,但回退时不会有to属性从而判断是回退还是下一步
+            var ball = document.querySelector('#ball');
+            var bar = document.querySelector('#bar');
+            var reset = document.querySelector('#reset');
+            var submit = document.querySelector('#submit');
+            var inpt = document.querySelector('#bar');
+            var Ball = function(dom){
+                this.x = 0;
+                this.dom = dom;
+            }
+            var ballDom = new Ball(ball);
+            Ball.prototype.move = function(options){
+                this.x = options.to?options.to:options.from;
+                this.dom.style.left = this.x ;
+            }
+            
+            var Command = function(obj){
+                var obj = obj;
+                var oldArguments = [] ;
+                var oldCommand = [];
+                this.excute = function(){
+                        var command = Array.prototype.shift.apply(arguments);
+                        obj[command].apply(obj,arguments);
+                        oldArguments.push(arguments);
+                        oldCommand.push(command);
+                    
+                }
+                this.undo = function(){
+                    var command = oldCommand.pop();
+                    var options =oldArguments.pop();
+                    if(command){
+                        delete options[0].to;
+                        obj[command].apply(obj,options);
+                    }
+                    
+                }
+            }
+            var ballCommand = new Command(ballDom);
+            submit.onclick = function(){
+                ballCommand.excute('move',{from : ballDom.x ,to : inpt.value});
+            }
+            reset.onclick = function(){
+                ballCommand.undo();
+            }
+            
+        </script>
+    </body>
+</html>
