@@ -7,6 +7,7 @@
 <body>
  <script>
     //思路：通过一个可访问的标志位 来判断之后是否运行
+    //闭包概念总结 : *闭包是一种改变变量作用域 及 改变变量生命周期的方法
     //练习:防止dom重复创建，通用单列
     var getSignal = function(fn){
         var _signal = null;
