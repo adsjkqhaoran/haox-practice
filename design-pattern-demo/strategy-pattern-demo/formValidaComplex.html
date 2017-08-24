@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单验证加强版</title>
+</head>
+<body>
+<form action="" id="form" onsubmit="return false;">
+    <input type="text" id="name"/>
+    <input type="text" id="tel"/>
+    <input type="submit" value="submit"/>
+</form>
+<script>
+    //添加了组合验证的功能，并且返回错误dom
+    var Validate = function () {
+        this.loop = [];
+    };
+    Validate.prototype.strategy = {
+        'notEmpty': function (value, errorMsg) {
+            if (!value) return errorMsg ? errorMsg : false;
+            return true;
+        },
+        'minLength': function (value, length, errorMsg) {
+            if (value.length < length) return errorMsg ? errorMsg : false;
+            return true;
+        },
+        'isMobile': function (value, errorMsg) {
+            if (!/^[0-9]$/.test(value)) {
+                return errorMsg ? errorMsg : false;
+            }
+            ;
+            return true;
+        }
+    };
+    Validate.prototype.add = function (dom, instruct,errorMsg) {
+        this.loop.push(function () {
+            var arr = instruct.split(':');
+            var key = arr.shift();
+            arr.unshift(dom.value);
+            arr.push(errorMsg);
+            return {
+                err: this.strategy[key].apply(null, arr),
+                dom: dom
+            };
+        })
+    };
+    //增加一个方法用于加复杂的逻辑
+    Validate.prototype.addArr = function(dom, instructArr){
+        var self = this;
+        for(var i in instructArr){
+            (function(i){
+                self.loop.push(function(){
+                   var cmd =instructArr[i].cmd;
+                   var arr = cmd.split(':');
+                   var key = arr.shift();
+                   arr.unshift(dom.value);
+                   arr.push(instructArr[i].errorMsg);
+                   return {
+                       err : self.strategy[key].apply(null,arr),
+                       dom : dom
+                   }
+
+                })
+            })(i)
+        }
+    };
+    Validate.prototype.start = function () {
+        for (var i in this.loop) {
+            var errorObj = this.loop[i].apply(this);
+            if (errorObj.err != true) {
+                return errorObj;
+            }
+        }
+    }
+    document.querySelector('#form').onsubmit = function () {
+        var validate = new Validate();
+        validate.addArr(document.querySelector('#name'),
+            [
+                {cmd: 'notEmpty', errorMsg: '不能为空!'},
+                {cmd:'minLength:10',errorMsg :'长度必须大于10'}
+            ]);
+        try {
+            var result = validate.start();
+        }catch (e){
+            console.log(e);
+            return false;
+        }
+
+
+        if (result.err != true) {
+            console.log(result);
+            return false;
+        }
+    };
+</script>
+</body>
+</html>

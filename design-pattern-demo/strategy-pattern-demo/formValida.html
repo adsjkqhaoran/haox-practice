@@ -30,7 +30,7 @@
         };
         Validator.prototype.add = function(dom,rule,errorMsg){
             this.loop.push(function(){
-                var ary = rule.split(":");
+                var ary = rule.split(":"); //变量的值跟随声明时的上下文，this的值则跟随运行时的上下文
                 var key = ary.shift();
                 ary.unshift(dom.value);
                 ary.push(errorMsg);
@@ -39,7 +39,7 @@
         }
         Validator.prototype.start = function(){
             for(var i in this.loop){
-                var error = this.loop[i].apply(this);
+                var error = this.loop[i].apply(this);//注意需要把this传入,不然会指向loop，而不是Validate
                 if(error){
                     alert(error);
                     return false;

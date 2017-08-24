@@ -5,14 +5,14 @@
     <title>commonSignal</title>
 </head>
 <body>
- <script>
+<script>
     //思路：通过一个可访问的标志位 来判断之后是否运行
     //闭包概念总结 : *闭包是一种改变变量作用域 及 改变变量生命周期的方法
     //练习:防止dom重复创建，通用单列
     var getSignal = function(fn){
         var _signal = null;
         return function(){
-               return _signal || (_signal = fn.apply(this,arguments));//其实就是保存第一次的运行结果的值从而实现功能
+            return _signal || (_signal = fn.apply(this,arguments));//其实就是保存第一次的运行结果的值从而实现功能
         }
     }
     var createDom = function(value){
@@ -24,6 +24,6 @@
     var createDomSignal =  getSignal(createDom);
     createDomSignal('1');
     createDomSignal('2');
- </script>
+</script>
 </body>
 </html>
