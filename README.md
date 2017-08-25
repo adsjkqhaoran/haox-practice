@@ -11,6 +11,7 @@
  - decorator pattern demo 装饰着模式
  - closure pattern demo 单列模式
  - strategy pattern demo 策略模式
+ - proxy pattern demo 代理模式
 
  # ALGORITHM
 

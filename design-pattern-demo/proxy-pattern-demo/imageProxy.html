@@ -1,0 +1,29 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>图片懒加载</title>
+</head>
+<body>
+</body>
+
+<script>
+    //代理模式即在不影响之前函数的功能，的前提下 为其增加某些处理 （过滤，筛选，合并，缓存），并往往与原函数有一样的功能接口或使用方法使用代理的好处是符合 单一职责原则 便于后期维护
+    //例如 图片懒加载功能 imgLoad 可以只负责单一的图片加载功能 我们可以把 懒加载写在代理函数上
+    var ImgLoading = (function () {
+        var img = document.createElement('img');
+        document.body.appendChild(img);
+        return function(src){
+            img.src = src;
+        }
+    })()
+    var ProxyImgLoading = function(src){
+        var img = new Image(src);
+        ImgLoading('loading.gif');
+        img.onload = function(){
+            ImgLoading(this.src );
+        }
+        img.src = src ;
+    }
+    ProxyImgLoading('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503660329565&di=dcef515316e3f442420e4d452ebdc9c2&imgtype=0&src=http%3A%2F%2Fbizhi.zhuoku.com%2F2013%2F07%2F22%2Fhua%2Fyihuayishijie49.jpg');
+    </script>
+</html>
