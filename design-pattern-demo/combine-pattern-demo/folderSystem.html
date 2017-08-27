@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件夹与文件遍历</title>
+</head>
+<body>
+
+</body>
+<script>
+    //组合模式 通过把数据保存为树结构 并提供相同的访问接口 但是组合节点和叶节点给予不同的实现方式 不同对象不同处理方式可以省去许多判断语句
+    //主要行为是 组合节点会继续遍历 叶节点 而叶节点则不继续遍历
+    //另外通过保存子节点和父节点的引用实现删除功能 删除时只是把应用去掉即可
+    var Folder = function(name){
+        this.files = []; //保存子节点引用
+        this.parent = null; //保存父节点引用
+        this.name = name;
+    }
+    Folder.prototype.add = function(node){
+        node.parent = this; // 改变传入子节点的parent属性 从而记录它加入的父节点
+        this.files.push(node);
+    }
+    Folder.prototype.scan = function(){
+        console.log(this.name);
+        for(var i in this.files){
+            this.files[i].scan(); //执行子节点的scan方法
+        }
+    }
+
+    var File = function(name){
+        this.parent = null;
+        this.files = [];
+        this.name = name;
+    }
+    File.prototype.add = function(){
+        throw new Error('该节点已经没有add方法');
+    }
+    File.prototype.scan = function(){
+        console.log(this.name);
+    }
+
+
+    var folder1 = new Folder('文件夹1');
+    var folder2 = new Folder('文件夹2');
+    var folder3 = new Folder('文件夹3');
+
+    var file11 = new File('文件1-1');
+    var file21 = new File('文件2-1');
+    var file22 = new File('文件2-2');
+
+    folder1.add(file11);
+    folder1.add(folder2);
+    folder2.add(file21);
+    folder2.add(file22);
+    folder2.add(folder3);
+
+
+    folder1.scan();
+</script>
+</html>
