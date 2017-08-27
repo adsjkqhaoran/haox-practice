@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>链式模式</title>
+</head>
+<body>
+
+</body>
+<script>
+    //通过链对象保存上个函数及下个函数的关系，当函数不符合预期时 直接跑下个对象 直至可行
+    //减少if 语句的烦恼 及由于上个函数和下个函数可以自由组合 故去除了两个函数之间的耦合 自由拼装 不会出现很多逻辑在一个函数体内
+    //类是于迭代模式 但是迭代 是迭代一个约定好的迭代体 这个在链的任意处都可开始 更灵活一点吧
+    var Chain = function (fn){
+        this.nextChain = null;//下个节点
+        this.fn = fn;　//该节点方法
+    }
+    Chain.prototype.next = function(fn){
+        this.nextChain = fn;
+        return this.nextChain;
+    }
+    Chain.prototype.excute = function(){
+        var ret = this.fn.apply(this,arguments);
+        if(!ret){
+            this.nextChain && this.nextChain.excute.apply(this.nextChain,arguments);
+        }
+        return ret;
+    }
+    var uploadSwf = new Chain(function(type){
+        if(type==1){
+            console.log('swf上传');
+            return true;
+        }
+        return false;
+    });
+    var uploadFlash = new Chain(function(type){
+        if(type==2){
+            console.log('flash上传');
+            return true;
+        }
+        return false;
+    });
+    var uploadAx = new Chain(function(type){
+        if(type==3){
+            console.log('Ax上传');
+            return true;
+        }
+        return false;
+    });
+    var uploadLoop = new Chain(function(){
+    });
+    uploadLoop.next(uploadSwf).next(uploadFlash).next(uploadAx);
+    uploadLoop.excute(3); //uploadSwf是链的开始 只需要执行它 便会开始迭代
+    //但是语意不怎么友好 并不知道使用upload便会迭代uploadFlash和uploadAx 感觉使用aop模式会好一点
+    //这里使用一个空的 uploadLoop来去除语意不友好的问题
+</script>
+</html>

@@ -13,6 +13,7 @@
  - strategy pattern demo 策略模式
  - proxy pattern demo 代理模式
  - combine pattern demo 组合模式
+ - chain pattern demo 职责链模式
 
  # ALGORITHM
 
