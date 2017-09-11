@@ -1,0 +1,22 @@
+<html>
+<body>
+<script>
+//    “实现一个函数输入123456789，输出123，456，789”
+//    使用递归逻辑会很清晰
+    var string = '12345678';
+    var sliceString = function(string,length,char){
+        var allLength = string.length;
+        if(allLength>length){
+            var newArr =  Array.prototype.slice.call(string,0,length);
+            var relay =  Array.prototype.slice.call(string,length);
+        }else{
+            return string;
+        }
+
+        return newArr.join('') + char + sliceString(relay.join(''),length,char);
+
+    }
+    console.log(sliceString(string,3,'|'));
+</script>
+</body>
+</html>

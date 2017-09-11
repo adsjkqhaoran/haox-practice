@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>layout_box</title>
+    <link rel="stylesheet" type="text/css" href="../css/layout_box.css">
+</head>
+<style>
+    html,body{ margin: 0px;width: 100%; }
+    .flex{
+        display: flex;
+        display: -webkit-flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        width:100%;
+    }
+    #left,#right{
+        width: 200px;
+        height: 200px;
+        background-color: #ffe6b8;
+    }
+    #left{flex:0 0 200px;}
+    #right{flex:0 0 200px;}
+    #center{flex:1;background-color: #eee;height: 200px;
+        }
+</style>
+<body>
+<div class="flex">
+<div id = "left">我是左边</div>
+
+<div id = "center">我是中间</div>
+<div id = "right">我是右边</div>
+</div>
+
+</body>
+</html>
