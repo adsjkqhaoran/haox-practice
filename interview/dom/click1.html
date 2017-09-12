@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>阿里</title>
+</head>
+<body>
+
+<a href="www.baidu.com">baidu</a>
+<a href="www.taobao.com">taobao</a>
+<a href="51efang.com">51efang.com</a>
+<script>
+    //写一段脚本，实现：当页面上任意一个链接被点击的时候，alert出这个链接在页面上的顺序号，如第一个链接则alert(1), 依次类推；
+    var aDom = document.querySelectorAll('a');
+    console.log(aDom);
+    aDom.forEach(function(dom,i){
+        dom.addEventListener('click',function(){
+            event.preventDefault();
+            console.log(i+1);
+        })
+    })
+
+</script>
+</body>
+</html>

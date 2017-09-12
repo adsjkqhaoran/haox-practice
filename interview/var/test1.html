@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>阿里</title>
+</head>
+<body>
+<script>
+    var foo = 1;
+    /*function main(){
+        alert(foo);
+        var foo = 2; // 变量提升 故上面那个foo为局部变量 但是还没赋值故为undefine
+        alert(this.foo); // this 母体直接当作函数使用时this指向window
+        this.foo = 3;
+    }
+    var m1 = main(); //undefine 1
+    var m2 = new main();// undefine undefine*/
+//  2.如果想要var m1 = main()产生的m1和前面的m2完全一致,又该如何改造main函数
+    function main(){
+        alert(foo);
+        var foo = 2;
+        alert(this.foo);
+        this.foo = 3;
+    }
+    var m1 = main.bind({}); //undefine undefine 顺便学习下undefined的用法
+    m1();
+    var m2 = new main();// undefine undefine
+</script>
+</body>
+</html>
