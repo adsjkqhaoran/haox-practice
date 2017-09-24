@@ -23,3 +23,14 @@
     > popsort   冒泡排序   
     > mergesort 归并排序
     > quicksort 快速排序
+
+ # INTERVIEW
+
+ - dom dom相关
+ - grail 圣杯模型
+ - string 字符处理相关
+ - var 变量生命周期等
+
+ # FRAME
+
+ - react
