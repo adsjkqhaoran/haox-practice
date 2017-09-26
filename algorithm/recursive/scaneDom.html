@@ -29,6 +29,7 @@
     var printNode = function(node){
         console.log(node);
     }
+    //思路:通过队列把子元素放到了父元素的同级队列之后 从而完成遍历
     //注意children与childNode的区别 用children比较好 用childNode他会把text空格换行等都算为子元素
     var scaneElement = function(node){
         var scanArr = [node];
