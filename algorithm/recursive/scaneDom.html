@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>广度遍历节点</title>
+</head>
+<body>
+<header id="header">
+    <ul id="menu">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</header>
+
+<div id="main" class="main">
+    <div id="warp" class="warp">
+        <div id="left" class="left">
+            <div class="tit"></div>
+        </div>
+        <div id="right" class="right">
+            <div class="tit"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var printNode = function(node){
+        console.log(node);
+    }
+    //注意children与childNode的区别 用children比较好 用childNode他会把text空格换行等都算为子元素
+    var scaneElement = function(node){
+        var scanArr = [node];
+
+        while(scanArr.length){
+            var ndthis = scanArr.shift();
+            printNode(ndthis);
+            if(!ndthis.children || !ndthis.children.length){
+                continue;
+            }
+            for(var i=0;i<ndthis.children.length;i++){
+                scanArr.push(ndthis.children[i]);
+            }
+        }
+    }
+    scaneElement(document.getElementById('main'));
+</script>
+</html>

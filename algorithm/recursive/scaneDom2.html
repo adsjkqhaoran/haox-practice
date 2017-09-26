@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>深度遍历节点</title>
+</head>
+<body>
+<header id="header">
+    <ul id="menu">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</header>
+
+<div id="main" class="main">
+    <div id="warp" class="warp">
+        <div id="left" class="left">
+            <div class="tit"></div>
+        </div>
+        <div id="right" class="right">
+            <div class="tit"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var printNode = function(node){
+        console.log(node);
+    }
+    var scaneElement = function(node,callback){
+        callback(node);
+        if(node.children.length){//有子元素向下取子元素
+            node = node.children[0];
+        }else if(node.nextElementSibling){//如果没有则取它同级别元素
+            node = node.nextElementSibling;
+        }else if(node.parentNode&&node.parentNode.nextElementSibling){//还是没有取父元素的同级别元素
+            node = node.parentNode.nextElementSibling;
+        }else{
+            return false;
+        }
+        scaneElement(node,callback);
+    }
+    scaneElement(document.getElementById('main'),printNode);
+</script>
+</html>
